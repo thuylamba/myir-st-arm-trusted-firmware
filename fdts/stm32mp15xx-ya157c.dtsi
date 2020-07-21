@@ -21,6 +21,15 @@
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
 	};
+	vdd_usb: fixedregulator@3 {
+         	compatible = "regulator-fixed";
+         	regulator-name = "vdd_usb";
+         	regulator-min-microvolt = <3300000>;
+         	regulator-max-microvolt = <3300000>;
+   		startup-delay-us = <70000>;
+   		regulator-boot-on;
+   		regulator-pull-down; 
+    	};
 };
 
 &bsec {
@@ -203,7 +212,7 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+/*
 			vdd_usb: ldo4 {
 				regulator-name = "vdd_usb";
 				regulator-min-microvolt = <3300000>;
@@ -216,7 +225,7 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+*/
 			vdda: ldo5 {
 				regulator-name = "vdda";
 				regulator-min-microvolt = <2900000>;
