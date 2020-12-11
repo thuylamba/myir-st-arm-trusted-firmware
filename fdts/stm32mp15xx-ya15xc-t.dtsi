@@ -420,7 +420,6 @@
 	secure-status = "okay";
 };
 
-
 &fmc {
         pinctrl-names = "default";
         pinctrl-0 = <&fmc_pins_a>;
@@ -433,8 +432,6 @@
                 nand-on-flash-bbt;
                 #address-cells = <1>;
                 #size-cells = <1>;
-		nand-ecc-strength = <4>;
-                nand-ecc-step-size = <512>;
         };
 };
 
