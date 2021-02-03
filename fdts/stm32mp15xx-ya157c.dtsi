@@ -40,7 +40,7 @@
 };
 
 &clk_hse {
-	st,digbypass;
+	st,bypass;
 };
 
 &cpu0{
