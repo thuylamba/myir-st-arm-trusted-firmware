@@ -31,6 +31,17 @@
 	chosen {
 		stdout-path = "serial0:115200n8";
 	};
+/*
+	vdd_usb: fixedregulator@3 {
+                compatible = "regulator-fixed";
+                regulator-name = "vdd_usb";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+                startup-delay-us = <70000>;
+                regulator-boot-on;
+                regulator-pull-down;
+        };
+*/
 
 };
 
