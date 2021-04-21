@@ -561,7 +561,7 @@ skip_console_init:
 
 	if (dt_pmic_status() > 0) {
 		initialize_pmic();
-		print_pmic_info_and_debug();
+		//print_pmic_info_and_debug();
 	}
 
 	stm32mp_io_setup();

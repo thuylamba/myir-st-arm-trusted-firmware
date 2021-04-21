@@ -11,7 +11,7 @@
 	
 	memory@c0000000 {
 		device_type = "memory";
-		reg = <0xc0000000 0x10000000>;
+		reg = <0xc0000000 0x10000000>;//256M
 	};
 	
 
@@ -75,18 +75,18 @@
 			buck3-supply = <&vin>;
 			buck4-supply = <&vin>;
 			ldo1-supply = <&v3v3>;
-			ldo2-supply = <&vin>;
-			ldo3-supply = <&vdd_ddr>;
+			//ldo2-supply = <&vin>;
+			//ldo3-supply = <&vdd_ddr>;
 			ldo4-supply = <&vin>;
-			ldo5-supply = <&vin>;
-			ldo6-supply = <&v3v3>;
+			//ldo5-supply = <&vin>;
+			//ldo6-supply = <&v3v3>;
 			vref_ddr-supply = <&vin>;
 			boost-supply = <&vin>;
 			pwr_sw1-supply = <&bst_out>;
 			pwr_sw2-supply = <&bst_out>;
 
 			vddcore: buck1 {
-				regulator-name = "vddcore";
+				regulator-name = "vddcore"; //to cpu
 				regulator-min-microvolt = <1200000>;
 				regulator-max-microvolt = <1350000>;
 				regulator-always-on;
@@ -105,7 +105,7 @@
 			};
 
 			vdd_ddr: buck2 {
-				regulator-name = "vdd_ddr";
+				regulator-name = "vdd_ddr";//to ddr
 				regulator-min-microvolt = <1350000>;
 				regulator-max-microvolt = <1350000>;
 				regulator-always-on;
@@ -125,7 +125,7 @@
 			};
 
 			vdd: buck3 {
-				regulator-name = "vdd";
+				regulator-name = "vdd";//to mmc
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
@@ -147,7 +147,7 @@
 			};
 
 			v3v3: buck4 {
-				regulator-name = "v3v3";
+				regulator-name = "v3v3";//to mmc
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
@@ -166,7 +166,7 @@
 			};
 
 			vdda: ldo1 {
-				regulator-name = "vdda";
+				regulator-name = "vdda";//to verf
 				regulator-min-microvolt = <1700000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
@@ -177,7 +177,7 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+/*
 			vldo2: ldo2 {
 				regulator-name = "vldo2";
 				regulator-min-microvolt = <1700000>;
@@ -190,7 +190,8 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+*/
+/*
 			vtt_ddr: ldo3 {
 				regulator-name = "vtt_ddr";
 				regulator-min-microvolt = <500000>;
@@ -207,9 +208,10 @@
 					regulator-off-in-suspend;
 				};
 			};
+*/
 
 			vdd_usb: ldo4 {
-				regulator-name = "vdd_usb";
+				regulator-name = "vdd_usb";//to usb
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
@@ -221,6 +223,8 @@
 				};
 			};
 
+
+/*
 			vdd_sd: ldo5 {
 				regulator-name = "vdd_sd";
 				regulator-min-microvolt = <1700000>;
@@ -233,7 +237,8 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+*/
+/*
 			vldo6: ldo6 {
 				regulator-name = "vldo6";
 				regulator-min-microvolt = <900000>;
@@ -246,7 +251,7 @@
 					regulator-off-in-suspend;
 				};
 			};
-
+*/
 			vref_ddr: vref_ddr {
 				regulator-name = "vref_ddr";
 				regulator-always-on;
@@ -310,6 +315,7 @@
 &pwr_regulators {
 	system_suspend_supported_soc_modes = <
 		STM32_PM_CSLEEP_RUN
+		STM32_PM_CSTOP_ALLOW_STOP
 		STM32_PM_CSTOP_ALLOW_LP_STOP
 		STM32_PM_CSTOP_ALLOW_STANDBY_DDR_SR
 	>;
@@ -319,6 +325,7 @@
 };
 
 &rcc {
+	//secure-status = "disabled";
 	st,hsi-cal;
 	st,csi-cal;
 	st,cal-sec = <60>;
@@ -448,18 +455,18 @@
 };
 
 
-
+//sd
 &sdmmc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
 	disable-wp;
 	st,neg-edge;
 	bus-width = <4>;
-	vmmc-supply = <&v3v3>;
+	vmmc-supply = <&vdd>;
 	status = "okay";
 };
 
-
+//emmc
 &sdmmc2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
@@ -469,24 +476,26 @@
 	st,neg-edge;
 	bus-width = <8>;
 	vmmc-supply = <&v3v3>;
-	vqmmc-supply = <&v3v3>;
+	vqmmc-supply = <&vdd>;
 	mmc-ddr-3_3v;
 	status = "okay";
 };
 
 
-
+/*
 &timers15 {
 	secure-status = "okay";
 	st,hsi-cal-input = <7>;
 	st,csi-cal-input = <8>;
 };
+*/
 
 &uart4 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart4_pins_a>;
 	status = "okay";
 };
+
 
 &usbotg_hs {
 	phys = <&usbphyc_port1 0>;
@@ -505,4 +514,7 @@
 
 &usbphyc_port1 {
 	phy-supply = <&vdd_usb>;
+
 };
+
+

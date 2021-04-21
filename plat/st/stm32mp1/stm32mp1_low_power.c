@@ -96,18 +96,21 @@ void stm32_apply_pmic_suspend_config(uint32_t mode)
 	const char *node_name = config_pwr[mode].regul_suspend_node_name;
 
 	assert(mode < ARRAY_SIZE(config_pwr));
-
 	if (node_name != NULL) {
 		if (!initialize_pmic_i2c()) {
+
 			panic();
 		}
 
 		if (pmic_set_lp_config(node_name) < 0) {
 			panic();
+			
+
 		}
 
 		if (pmic_configure_boot_on_regulators() < 0) {
 			panic();
+
 		}
 	}
 }
@@ -134,7 +137,6 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 
 	/* Switch to Software Self-Refresh mode */
 	ddr_set_sr_mode(DDR_SSR_MODE);
-
 	dcsw_op_all(DC_OP_CISW);
 
 	stm32_clean_context();
@@ -144,6 +146,7 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 		 * The first 64 bytes of DDR need to be saved for DDR DQS
 		 * training
 		 */
+
 		stm32_save_ddr_training_area();
 	}
 
@@ -152,9 +155,9 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 
 		if (mode == STM32_PM_CSTOP_ALLOW_LP_STOP) {
 			pwr_cr1 |= PWR_CR1_LPCFG;
+
 		}
 	}
-
 	/* Clear RCC interrupt before enabling it */
 	mmio_setbits_32(rcc_base + RCC_MP_CIFR, RCC_MP_CIFR_WKUPF);
 
@@ -183,7 +186,9 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 	 * This is also the procedure awaited when switching off power supply.
 	 */
 	if (ddr_standby_sr_entry(&zq0cr0_zdata) != 0) {
+
 		panic();
+
 	}
 
 	stm32mp_clk_enable(RTCAPB);
@@ -204,6 +209,7 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 
 		if (stm32_save_context(zq0cr0_zdata) != 0) {
 			panic();
+
 		}
 
 		/* Keep retention and backup RAM content in standby */
@@ -214,7 +220,6 @@ static void enter_cstop(uint32_t mode, uint32_t nsec_addr)
 			;
 		}
 	}
-
 	stm32mp_clk_disable(RTCAPB);
 
 	stm32_rtc_get_calendar(&sleep_time);
@@ -240,6 +245,7 @@ void stm32_exit_cstop(void)
 
 	if (ddr_sw_self_refresh_exit() != 0) {
 		panic();
+
 	}
 
 	/* Switch to memorized Self-Refresh mode */
@@ -272,6 +278,7 @@ void stm32_exit_cstop(void)
 
 	if (stm32mp1_clock_stopmode_resume() != 0) {
 		panic();
+
 	}
 }
 
@@ -310,6 +317,7 @@ static void enter_csleep(void)
 
 void stm32_enter_low_power(uint32_t mode, uint32_t nsec_addr)
 {
+
 	switch (mode) {
 	case STM32_PM_SHUTDOWN:
 		enter_shutdown();

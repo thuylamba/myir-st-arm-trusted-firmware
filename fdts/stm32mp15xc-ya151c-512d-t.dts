@@ -9,11 +9,11 @@
 #include "stm32mp15xxac-pinctrl.dtsi"
 #include <dt-bindings/soc/st,stm32-etzpc.h>
 #include "stm32mp15xx-ya15xc-t.dtsi"
-#include "stm32mp15-ddr3-1x2Gb-1066-binG.dtsi" //256MiB DDR
+#include "stm32mp15-ddr3-1x4Gb-1066-binG.dtsi" //512MiB DDR
 
 
 / {
-	model = "MYIRTECH MYD-YA151C-256D-t Development Board";
+	model = "MYIRTECH MYD-YA151C-512D-t Development Board";
 	compatible = "myir,myd-ya15xc-t", "st,stm32mp157";
 	
 	aliases {
@@ -22,7 +22,7 @@
 	
 	memory@c0000000 {
                 device_type = "memory";
-                reg = <0xc0000000 0x10000000>;
+                reg = <0xc0000000 0x20000000>;
         };
 
 	chosen {
@@ -44,6 +44,5 @@
 		DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_LOCK)
 		DECPROT(STM32MP1_ETZPC_BKPSRAM_ID, DECPROT_S_RW, DECPROT_LOCK)
 		DECPROT(STM32MP1_ETZPC_IWDG1_ID, DECPROT_S_RW, DECPROT_LOCK)
-
 	>;
 };

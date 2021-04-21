@@ -112,11 +112,13 @@ static int pmic_config_boot_on(void *fdt, int node, const char *regu_name)
 	uint16_t voltage_max;
 	int status;
 	int pmic_voltage;
+	
 
 	if ((fdt_getprop(fdt, node, "regulator-boot-on", NULL) == NULL) &&
 	    (fdt_getprop(fdt, node, "regulator-always-on", NULL) == NULL)) {
 		return 0;
 	}
+	
 
 	if (fdt_getprop(fdt, node, "regulator-pull-down", NULL) != NULL) {
 
@@ -125,7 +127,7 @@ static int pmic_config_boot_on(void *fdt, int node, const char *regu_name)
 			return status;
 		}
 	}
-
+	
 	if (fdt_getprop(fdt, node, "st,mask-reset", NULL) != NULL) {
 
 		status = stpmic1_regulator_mask_reset_set(regu_name);
@@ -138,11 +140,13 @@ static int pmic_config_boot_on(void *fdt, int node, const char *regu_name)
 					  &voltage_max) < 0) {
 		return 0;
 	}
+	
 
 	pmic_voltage = stpmic1_regulator_voltage_get(regu_name);
 	if (pmic_voltage < 0) {
 		return pmic_voltage;
 	}
+	
 
 	if ((uint16_t)pmic_voltage < voltage_min) {
 		voltage = voltage_min;
@@ -156,9 +160,11 @@ static int pmic_config_boot_on(void *fdt, int node, const char *regu_name)
 	if (voltage != 0U) {
 		status = stpmic1_regulator_voltage_set(regu_name, voltage);
 		if (status < 0) {
+			INFO("pmic pmic_config-status=%d\n",status);
 			return status;
 		}
 	}
+	
 
 	if (!stpmic1_is_regulator_enabled(regu_name)) {
 		status = stpmic1_regulator_enable(regu_name);
@@ -166,6 +172,7 @@ static int pmic_config_boot_on(void *fdt, int node, const char *regu_name)
 			return status;
 		}
 	}
+	
 
 	return 0;
 }
@@ -246,7 +253,7 @@ static int pmic_operate(uint8_t command, const char *node_name,
 	int pmic_node, regulators_node, subnode;
 	void *fdt;
 	int ret = -EIO;
-
+	
 	if (fdt_get_address(&fdt) == 0) {
 		return -ENOENT;
 	}
@@ -260,6 +267,7 @@ static int pmic_operate(uint8_t command, const char *node_name,
 	if (regulators_node < 0) {
 		return -ENOENT;
 	}
+
 
 	fdt_for_each_subnode(subnode, fdt, regulators_node) {
 		const char *regu_name = fdt_get_name(fdt, subnode, NULL);
@@ -282,6 +290,7 @@ static int pmic_operate(uint8_t command, const char *node_name,
 			return ret;
 
 		case CMD_CONFIG_BOOT_ON:
+			
 			ret = pmic_config_boot_on(fdt, subnode, regu_name);
 			if (ret < 0) {
 				return ret;
@@ -290,6 +299,8 @@ static int pmic_operate(uint8_t command, const char *node_name,
 
 #if defined(IMAGE_BL32)
 		case CMD_CONFIG_LP:
+			
+
 			assert(node_name != NULL);
 
 			ret = pmic_config_lp(fdt, subnode, node_name,

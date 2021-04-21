@@ -13,7 +13,7 @@
 		device_type = "memory";
 		reg = <0xc0000000 0x20000000>;
 	};
-
+/*
 	vin: vin {
 		compatible = "regulator-fixed";
 		regulator-name = "vin";
@@ -21,6 +21,7 @@
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
 	};
+*/
 };
 
 &bsec {
@@ -66,7 +67,7 @@
 
 		regulators {
 			compatible = "st,stpmic1-regulators";
-			buck1-supply = <&vin>;
+			/*buck1-supply = <&vin>;
 			buck2-supply = <&vin>;
 			buck3-supply = <&vin>;
 			buck4-supply = <&vin>;
@@ -79,7 +80,7 @@
 			vref_ddr-supply = <&vin>;
 			boost-supply = <&vin>;
 			pwr_sw1-supply = <&bst_out>;
-			pwr_sw2-supply = <&bst_out>;
+			pwr_sw2-supply = <&bst_out>;*/
 
 			vddcore: buck1 {
 				regulator-name = "vddcore";
