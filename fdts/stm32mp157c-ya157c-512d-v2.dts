@@ -11,7 +11,7 @@
 #include "stm32mp15xx-ya157c.dtsi"
 
 / {
-	model = "MYIRTECH MYD-YA157C-512D v2 Development Board";
+	model = "MYIRTECH MYD-YA157C-1D v2 Development Board";
 	compatible = "st,myd-ya157c-v2", "st,stm32mp157";
 	
 	aliases {
